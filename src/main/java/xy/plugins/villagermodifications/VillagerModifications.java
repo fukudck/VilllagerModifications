@@ -60,8 +60,6 @@ public final class VillagerModifications extends JavaPlugin implements Listener 
         System.out.println("Villager Modifiers are running");
         getServer().getPluginManager().registerEvents(this, this);
         int pluginId = 10822;
-        Metrics metrics = new Metrics(this, pluginId);
-        metrics.addCustomChart(new Metrics.SimplePie("chart_id", () -> "My value"));
     }
 
     public void loadSettings() {
@@ -284,8 +282,24 @@ public final class VillagerModifications extends JavaPlugin implements Listener 
                         for (String book : configbooks) {
                             if (book.contains(":")) {
                                 String[] book_level = book.split(":");
-                                Enchantment enchantment = EnchantmentWrapper.getByKey(NamespacedKey.minecraft(book_level[0]));
-                                int level = Integer.parseInt(book_level[1]);
+                                Enchantment enchantment = null;
+                                int level = 0;
+
+                                //System.out.println(book_level.length);
+
+                                if (book_level.length == 2) {
+                                    enchantment = EnchantmentWrapper.getByKey(NamespacedKey.minecraft(book_level[0]));
+                                    level = Integer.parseInt(book_level[1]);
+                                }
+                                else {
+                                    String namespace = book_level[0];
+                                    String enchantment_name = book_level[1];
+                                    level = Integer.parseInt(book_level[2]);
+                                    enchantment = Enchantment.getByKey(new NamespacedKey(namespace, enchantment_name));
+                                }
+
+                                //Enchantment enchantment = EnchantmentWrapper.getByKey(NamespacedKey.minecraft(book_level[0]));
+                                //int level = Integer.parseInt(book_level[1]);
                                 if (meta.hasStoredEnchant(enchantment) && meta.getStoredEnchantLevel(enchantment) == level) {
                                     book = book.replace(":", "_");
                                     int vrestricted = cfg.getInt(book + ".restricted");

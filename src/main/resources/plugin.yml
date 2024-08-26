@@ -1,6 +1,6 @@
 main: xy.plugins.villagermodifications.VillagerModifications
 author: Xy
-version: 1.5.0
+version: 1.5.0a
 api-version: 1.13
 name: VillagerModifications
 
